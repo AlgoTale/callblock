@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission
+        android:name="android.permission.MODIFY_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,6 +20,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PatternCallBlocker"
         tools:targetApi="31">
+        <service
+            android:name=".MyService"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -27,19 +40,14 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <receiver android:name=".PhoneStateReceiver"
+
+        <receiver
+            android:name=".PhoneStateReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
     </application>
-
-    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE"
-        tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.READ_CALL_LOG" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
 
 </manifest>
