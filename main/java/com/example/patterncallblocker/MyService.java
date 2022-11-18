@@ -11,8 +11,6 @@ public class MyService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
         onTaskRemoved(intent);
-        Toast.makeText(getApplicationContext(),"This is a Service running in Background",
-                Toast.LENGTH_SHORT).show();
         return START_STICKY;
     }
     @Override
