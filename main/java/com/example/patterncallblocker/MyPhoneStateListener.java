@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 public class MyPhoneStateListener extends PhoneStateListener {
 
-    public static Context context;
+    public Context context;
 
     public MyPhoneStateListener(Context context) {
         super();
@@ -23,13 +23,13 @@ public class MyPhoneStateListener extends PhoneStateListener {
         switch (state) {
             case TelephonyManager.CALL_STATE_RINGING:
                 incomingNumber = incomingNumber.substring(1);
-                Toast.makeText(context, "Ringing State Number is - " + incomingNumber, Toast.LENGTH_SHORT).show();
                 for(Pattern pattern: AppDatabase.getDatabase(context).patternDao().getAll()) {
                     if (java.util.regex.Pattern.matches(pattern.regexPattern, incomingNumber)) {
                         try {
                             TelecomManager telecomManager = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                                 telecomManager.endCall();
+                                Toast.makeText(context, "Call Declined - " + incomingNumber, Toast.LENGTH_SHORT).show();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
