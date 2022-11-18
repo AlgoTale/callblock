@@ -5,7 +5,9 @@ import android.annotation.SuppressLint;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -65,7 +67,9 @@ public class MainActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         data = new ArrayList<>();
 
-        startService(new Intent(getApplicationContext(),MyService.class));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            startForegroundService(new Intent(getApplicationContext(),MyService.class));
+        }
 
         setContentView(R.layout.activity_main);
 
@@ -90,7 +94,7 @@ public class MainActivity extends ListActivity {
             private int nr = 0;
 
             @Override
-            public boolean onCreateActionMode(android.view.ActionMode actionMode, Menu menu) {
+            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
                 nr = 0;
                 MenuInflater inflater = getMenuInflater();
                 inflater.inflate(R.menu.contextual_menu, menu);
@@ -98,12 +102,12 @@ public class MainActivity extends ListActivity {
             }
 
             @Override
-            public boolean onPrepareActionMode(android.view.ActionMode actionMode, Menu menu) {
+            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
                 return false;
             }
 
             @Override
-            public boolean onActionItemClicked(android.view.ActionMode actionMode, MenuItem menuItem) {
+            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
 
                     case R.id.item_delete:
@@ -124,12 +128,12 @@ public class MainActivity extends ListActivity {
             }
 
             @Override
-            public void onDestroyActionMode(android.view.ActionMode actionMode) {
+            public void onDestroyActionMode(ActionMode actionMode) {
                 mAdapter.clearSelection();
             }
 
             @Override
-            public void onItemCheckedStateChanged(android.view.ActionMode actionMode, int i, long l, boolean b) {
+            public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
                 if (b) {
                     nr++;
                     mAdapter.setNewSelection(i, true);

@@ -28,8 +28,8 @@ public class MyPhoneStateListener extends PhoneStateListener {
                         try {
                             TelecomManager telecomManager = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                                telecomManager.endCall();
                                 Toast.makeText(context, "Call Declined - " + incomingNumber, Toast.LENGTH_SHORT).show();
+                                telecomManager.endCall();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
