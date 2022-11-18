@@ -1,0 +1,43 @@
+package com.example.patterncallblocker;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.os.Build;
+import android.telecom.TelecomManager;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
+import android.widget.Toast;
+
+public class MyPhoneStateListener extends PhoneStateListener {
+
+    public static Context context;
+
+    public MyPhoneStateListener(Context context) {
+        super();
+        this.context = context;
+    }
+
+    @SuppressLint("MissingPermission")
+    public void onCallStateChanged(int state, String incomingNumber) {
+
+        switch (state) {
+            case TelephonyManager.CALL_STATE_RINGING:
+                incomingNumber = incomingNumber.substring(1);
+                Toast.makeText(context, "Ringing State Number is - " + incomingNumber, Toast.LENGTH_SHORT).show();
+                for(Pattern pattern: AppDatabase.getDatabase(context).patternDao().getAll()) {
+                    if (java.util.regex.Pattern.matches(pattern.regexPattern, incomingNumber)) {
+                        try {
+                            TelecomManager telecomManager = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                                telecomManager.endCall();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
+                }
+                break;
+        }
+    }
+}
