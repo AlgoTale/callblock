@@ -47,6 +47,7 @@ public class MainActivity extends ListActivity {
         super.onStart();
 
         patternDao = AppDatabase.getDatabase(getApplicationContext()).patternDao();
+        data.clear();
         for(Pattern pattern: patternDao.getAll()) {
             data.add(pattern.regexPattern);
         }
